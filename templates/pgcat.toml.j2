@@ -1,3 +1,4 @@
+# https://github.com/postgresml/pgcat/blob/main/CONFIG.md
 [general]
 log_level = "info"
 port = 5432
@@ -5,6 +6,9 @@ host = "0.0.0.0"
 
 admin_username = "{{ postgres_user }}"
 admin_password = "{{ postgres_password }}"
+
+# https://github.com/postgresml/pgcat/blob/main/CONFIG.md?plain=1#L149
+autoreload = 10000
 
 [pools.direct]
 pool_mode = "session"
