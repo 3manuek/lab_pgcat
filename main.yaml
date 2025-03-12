@@ -107,3 +107,37 @@
           - name: back-net
 
   tags: [create]
+
+- name: Run pgbench container 
+  hosts: localhost
+  tasks:
+    - name: Build docker container for pgbench
+      community.docker.docker_image_build:
+        name: pgbench
+        path: ./docker/pgbench
+        dockerfile: Dockerfile 
+        tag: latest
+        # nocache: true
+        rebuild: "always"
+    
+    - name: Execute benchmark
+      community.docker.docker_container:
+        name: pgbench 
+        image: pgbench:latest
+        state: started
+        detach: false
+        user: "postgres"
+        env:
+          PGPASSWORD: "{{ postgres_password }}"
+        networks:
+          - name: back-net
+        labels:
+          com.docker.scaled.kind: pgbench
+        volumes:
+          - "./pgbench-shard.sql:/home/postgres/pgbench-shard.sql"
+        command: >
+          -h pgcat -c 10 -U {{ postgres_user }} -d shardpool -f /home/postgres/pgbench-shard.sql 
+      register: pgbench_results
+
+    - debug: msg="{{ pgbench_results.container.Output | regex_findall('.*tps.*') }}"
+  tags: [pgbench]
