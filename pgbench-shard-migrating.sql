@@ -2,7 +2,6 @@
 \set key random(1, 10000 * :scale)
 
 -- Write: Insert a new user
--- SET SHARDING KEY TO :key;
 SET SHARDING KEY TO ':key';
 
 BEGIN;
@@ -11,7 +10,6 @@ INSERT INTO users (username, email) VALUES (
     :key || '@example.com'
 ) ON CONFLICT (username) DO NOTHING;
 
--- SET SHARDING KEY TO ':key';
 SELECT * FROM users WHERE email = :key || '@example.com';
 END;
 -- Read: Select a user by email

@@ -75,7 +75,8 @@
           POSTGRES_PASSWORD: "{{ postgres_password }}"
           POSTGRES_DB: "{{ postgres_db }}"
         ports:
-          - "16000-16100:5432"
+          - "16000-16100:5432" # In Production, we shouldn't expose, all connections should 
+                               # go through pool. See the direct pool configuration in pgcat.toml
         networks:
           - name: back-net
         labels:

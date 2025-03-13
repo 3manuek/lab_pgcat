@@ -13,7 +13,10 @@ ansible-playbook main.yaml
 ansible-playbook main.yaml --tags clean
 ```
 
+The playbook executes a quick benchmark through the `pgbench` tag.
+
+For executing a manual benchmark, here is an example command:
 
 ```bash
-PGPASSWORD=password /Applications/Postgres.app/Contents/Versions/17/bin/pgbench -h localhost -p 15432 -U node_user -d shardpool -f pgbench-shard.sql -c 10 -T 40
+PGPASSWORD=password pgbench -h localhost -p 15432 -U node_user -d shardpool -f pgbench-shard.sql -c 10 -T 40
 ```
